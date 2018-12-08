@@ -1,2 +1,2 @@
-# Android-Project
-Study Helper
+# Study Helper
+

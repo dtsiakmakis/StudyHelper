@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_add_new_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:title="Add Event" />
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/et_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Subject"
+                android:inputType="textPersonName"
+                android:theme="@style/EditTextTheme" />
+
+            <!--<EditText-->
+                <!--android:id="@+id/et_teacher"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Nauczyciel"-->
+                <!--android:inputType="textPersonName" />-->
+
+            <EditText
+                android:id="@+id/et_classroom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="location" />
+
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="description"
+                android:inputType="textPersonName" />
+
+            <EditText
+            android:id="@+id/et_day_of_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="day of year"
+            android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/et_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="color"
+                android:focusable="false"
+                android:inputType="textPersonName" />
+
+            <!-- <EditText
+                android:id="@+id/et_frequency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Częstotliwość"
+                android:inputType="textPersonName" /> -->
+
+            <EditText
+                android:id="@+id/et_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/start_time" />
+
+            <EditText
+                android:id="@+id/et_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/end_time"/>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Repeat"/>
+            <CheckBox
+                android:id="@+id/et_Mon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Monday"/>
+            <CheckBox
+                android:id="@+id/et_Tues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Tuesday"/>
+            <CheckBox
+                android:id="@+id/et_Wedn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Wednesday"/>
+            <CheckBox
+                android:id="@+id/et_Thur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Thursday"/>
+            <CheckBox
+                android:id="@+id/et_Fri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Friday"/>
+            <CheckBox
+                android:id="@+id/et_Sat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Saturday"/>
+            <CheckBox
+                android:id="@+id/et_Sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Sunday"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -110,6 +110,11 @@ public class DetectNoiseThread extends AppCompatActivity {
                 }
             }
         });
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    RECORD_AUDIO);
+        }
     }
 //    @Override
 //    public void onResume() {
@@ -130,11 +135,11 @@ public class DetectNoiseThread extends AppCompatActivity {
     }
     private void start() {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    RECORD_AUDIO);
-        }
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+//                    RECORD_AUDIO);
+//        }
         initializeApplicationConstants();
         mSensor.start();
         if (!mWakeLock.isHeld()) {
@@ -200,7 +205,7 @@ public class DetectNoiseThread extends AppCompatActivity {
         } else {
             notification_builder = new NotificationCompat.Builder(this);
         }
-        notification_builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+        notification_builder.setSmallIcon(R.drawable.study_helper_logo)
                     .setContentTitle("Study Helper")
                 .setContentText("Place is too loud. Please move somewhere else to study.")
                 .setAutoCancel(true)

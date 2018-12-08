@@ -1,97 +1,82 @@
 package com.example.ashvi.studyhelper;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.Toast;
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
-    private FirebaseAuth mAuth;
-    private EditText password;
     private EditText email;
-    private Button button_register;
-    private Button button_login;
+    private EditText password;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private Button button;
+    private Button goRegister;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        email = (EditText) findViewById(R.id.signup_email_input);
-        password =(EditText) findViewById(R.id.signup_password_input);
-        button_register = (Button)findViewById(R.id.button_register);
-        button_login = (Button)findViewById(R.id.button_login);
+
+        email = (EditText)findViewById(R.id.login_email_input);
+        password = (EditText)findViewById(R.id.login_password_input);
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        button = (Button)findViewById(R.id.login);
+        goRegister = findViewById(R.id.goRegister);
 
 
-        button_register.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == button_register){
-                    RegisterUser();
+                if (v == button){
+                    LoginUser();
                 }
             }
         });
-        button_login.setOnClickListener(new View.OnClickListener() {
+        goRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == button_login){
-                    startActivity(new Intent(getApplicationContext(),
-                            LoginActivity.class));
+                if (v == goRegister){
+                        startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
                 }
             }
         });
     }
-
-    public void RegisterUser(){
+    public void LoginUser() {
         String Email = email.getText().toString().trim();
         String Password = password.getText().toString().trim();
-        if (TextUtils.isEmpty(Email)){
-            Toast.makeText(this, "A Field is Empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(Password)){
-            Toast.makeText(this, "A Field is Empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mAuth.createUserWithEmailAndPassword(Email, Password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        try {
-                            //check if successful
+        if ((Email.equals("")) && (Password.equals(""))) {
+            Toast.makeText(MainActivity.this, "Please fill out your email and password",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(Email, Password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                //User is successfully registered and logged in
-                                //start Profile Activity here
-                                Toast.makeText(MainActivity.this, "registration successful",
-                                        Toast.LENGTH_SHORT).show();
+                                currentUser = mAuth.getCurrentUser();
                                 finish();
-                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                            }else{
-                                Toast.makeText(MainActivity.this, "Couldn't register, try again",
+                                startActivity(new Intent(getApplicationContext(),
+                                        ProfileActivity.class));
+                            } else {
+                                Toast.makeText(MainActivity.this, "couldn't login",
                                         Toast.LENGTH_SHORT).show();
                             }
-                        }catch (Exception e){
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+        }
     }
 }

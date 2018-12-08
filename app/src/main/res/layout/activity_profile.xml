@@ -25,21 +25,15 @@
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="130dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
             android:src="@drawable/common_google_signin_btn_icon_light_normal_background"
-            app:civ_border_color="@color/colorAccent"
+            app:civ_border_color="@color/colorPrimary"
             app:civ_border_width="3dp" />
 
         <TextView
             android:id="@+id/user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -48,70 +42,100 @@
             android:textColor="#000"
             android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/button_logout"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/preferences"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#0ABBB5"
+                android:src="@drawable/settings"
+                android:text="Preferences"
+                android:tooltipText="Preferences"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="207dp"
+                tools:layout_editor_absoluteY="196dp"
+                tools:targetApi="o" />
+
+            <ImageButton
+                android:id="@+id/calendar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:tooltipText="Calendar"
+                android:backgroundTint="#0ABBB5"
+                android:src="@drawable/calendar"
+                android:layout_marginStart="40dp"
+                android:text="My Calendar"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="207dp"
+                tools:layout_editor_absoluteY="196dp"
+                tools:targetApi="o" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/resource"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#0ABBB5"
+                android:src="@drawable/resource"
+                android:tooltipText="Resources"
+                android:text="Resources"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="207dp"
+                tools:layout_editor_absoluteY="196dp"
+                tools:targetApi="o" />
+
+            <ImageButton
+                android:id="@+id/dashboard"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#0ABBB5"
+                android:src="@drawable/dashboard"
+                android:tooltipText="Dashboard"
+                android:text="Dashboard"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="207dp"
+                tools:layout_editor_absoluteY="196dp"
+                tools:targetApi="o" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/button_logout"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/logout"
+            android:tooltipText="Logout"
+            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/round"
             android:text="Logout"
-            android:layout_gravity="center"/>
-
-        <Button
-            android:id="@+id/preferences"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="@drawable/blue"
-            android:text="Preferences"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-        <Button
-            android:id="@+id/calendar"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="@drawable/blue"
-            android:text="My Calendar"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-
-        <Button
-            android:id="@+id/dashboard"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="@drawable/blue"
-            android:text="Dashboard"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="91dp"
-            app:srcCompat="@android:color/holo_blue_dark"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-
-        <Button
-            android:id="@+id/resource"
-            android:layout_width="match_parent"
-            android:layout_height="82dp"
-            android:background="@drawable/blue"
-            android:text="Resources"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-
-        <ImageButton
-            android:id="@+id/imageButton12"
-            android:layout_width="match_parent"
-            android:layout_height="91dp"
-            app:srcCompat="@android:color/holo_blue_dark"
-            tools:layout_editor_absoluteX="54dp"
-            tools:layout_editor_absoluteY="196dp" />
+            tools:targetApi="o" />
 
 
     </LinearLayout>

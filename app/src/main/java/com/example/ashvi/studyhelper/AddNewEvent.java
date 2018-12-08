@@ -212,10 +212,10 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
             String day  = String.format("%02d/%02d/%d",month,dayofMonth,year);
 
 
-            Log.d(TAG, "New Input from MainActivity ,editing existing event");
+            Log.d(TAG, "New Input from RegisterActivity ,editing existing event");
             setEventInput(location,subject,description,color,day,startTime,endTime);
         } else {
-            Log.d(TAG,"No input from MainActivity, setting new event");
+            Log.d(TAG,"No input from RegisterActivity, setting new event");
             event = new WeekViewEvent();
         }
     }
@@ -328,7 +328,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
     }
 
     private void goBackToTimetableActivity() {
-        Log.d(TAG,  "Going back to MainActivity");
+        Log.d(TAG,  "Going back to RegisterActivity");
         Intent intent = new Intent(this, CalendarActivity.class);
 
         mDatabase= FirebaseDatabase.getInstance().getReference();

@@ -1,6 +1,7 @@
 package com.example.ashvi.studyhelper;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,13 +33,13 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView Email;
     private TextView Uid;
     private TextView user_name;
-    private Button logout;
-    private Button preferences;
-    private Button resources;
+    private ImageButton logout;
+    private ImageButton preferences;
+    private ImageButton resources;
     private Button noiseDetect;
     private Button studyLocations;
-    private Button userCalendar;
-    private Button dash;
+    private ImageButton userCalendar;
+    private ImageButton dash;
 
     private ImageView profilePicture;
     private Bitmap profilePic;
@@ -53,10 +55,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mAuth = FirebaseAuth.getInstance();
-        logout = (Button)findViewById(R.id.button_logout);
-        preferences = (Button) findViewById(R.id.preferences);
-        resources = (Button) findViewById(R.id.resource);
-        dash=(Button)findViewById(R.id.dashboard);
+        logout = findViewById(R.id.button_logout);
+        preferences = findViewById(R.id.preferences);
+        resources = findViewById(R.id.resource);
+        dash = findViewById(R.id.dashboard);
 
 
         user_name = (TextView)findViewById(R.id.user_name);
@@ -82,13 +84,12 @@ public class ProfileActivity extends AppCompatActivity {
         nameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             //System.out.print("I am inside event");
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     u = singleSnapshot.getValue(User.class);
 
-                    Toast.makeText(ProfileActivity.this, "Got Something I guess:"+ u.toString(),
-                            Toast.LENGTH_SHORT).show();
                     String u_name = u.name;
                     String u_id = u.id;
                     String major = u.major;
@@ -98,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
                         profilePic = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                         profilePicture.setImageBitmap(profilePic);
                     }
-                    user_name.setText("Hello "+u_name+"Your major :"+major);
+                    user_name.setText("Hello " + u_name + "!");
                 }
             }
             @Override
@@ -116,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (v==logout){
                     if (user != null) {
                         mAuth.signOut();
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }
             }
@@ -162,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v == preferences){
                     if (user != null) {
-                        //Testing with LoginActivity Class
+                        //Testing with MainActivity Class
                         startActivity(new Intent(getApplicationContext(), StudentPreferences.class));
                     }
                 }
@@ -173,7 +174,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v == noiseDetect){
                     if (user != null) {
-                        //Testing with LoginActivity Class
+                        //Testing with MainActivity Class
                         startActivity(new Intent(getApplicationContext(), DetectNoiseThread.class));
                     }
                 }
@@ -184,7 +185,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v == resources){
                     if (user != null) {
-                        //Testing with LoginActivity Class
+                        //Testing with MainActivity Class
                         startActivity(new Intent(getApplicationContext(), Resources.class));
                     }
                 }
@@ -195,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v == studyLocations){
                     if (user != null) {
-                        //Testing with LoginActivity Class
+                        //Testing with MainActivity Class
                         startActivity(new Intent(getApplicationContext(), GeofenceActivity.class));
                     }
                 }

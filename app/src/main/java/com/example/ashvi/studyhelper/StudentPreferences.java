@@ -76,7 +76,7 @@ public class StudentPreferences extends AppCompatActivity  {
         setContentView(R.layout.activity_preferences);
         namePref = findViewById(R.id.namePref);
         majorPref = findViewById(R.id.majorPref);
-        hoursPref = findViewById(R.id.hoursPref);
+//        hoursPref = findViewById(R.id.hoursPref);
         done = findViewById(R.id.done_button);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
@@ -131,7 +131,7 @@ public class StudentPreferences extends AppCompatActivity  {
 
                     namePref.setText(namePreference);
                     majorPref.setText(majorPreference);
-                    hoursPref.setText(hoursPreference);
+//                    hoursPref.setText(hoursPreference);
                 }
             }
             @Override

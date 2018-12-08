@@ -15,9 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,7 +50,7 @@ public class GeofenceActivity extends AppCompatActivity
             GoogleMap.OnMarkerClickListener,
         ResultCallback<Status> {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = RegisterActivity.class.getSimpleName();
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
     private static final float GEOFENCE_RADIUS = 100.0f; // in meters
@@ -72,7 +69,7 @@ public class GeofenceActivity extends AppCompatActivity
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     // Create a Intent send by the notification
     public static Intent makeNotificationIntent(Context context, String msg) {
-        Intent intent = new Intent( context, MainActivity.class );
+        Intent intent = new Intent( context, RegisterActivity.class );
         intent.putExtra( NOTIFICATION_MSG, msg );
         return intent;
     }
@@ -97,7 +94,6 @@ public class GeofenceActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (v == addGeofence){
-                    startGeofence();
 
                 }
             }

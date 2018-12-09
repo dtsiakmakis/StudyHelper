@@ -29,6 +29,8 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
+
+
     //private List<WeekViewEvent> allEvents;
 
 
@@ -37,10 +39,10 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+
+
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
-
-
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -55,36 +57,13 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         // Set long press listener for empty view
         mWeekView.setEmptyViewLongPressListener(this);
 
-
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
     }
 
-//    private void updateEvents(Intent intent){
-//        Calendar startTime = Calendar.getInstance();
-//        startTime.set(Calendar.YEAR, intent.getIntExtra("Year",2018));
-//        startTime.set(Calendar.MONTH, intent.getIntExtra("Month",12));
-//        startTime.set(Calendar.DAY_OF_MONTH, intent.getIntExtra("DayofMonth",0));
-//        startTime.set(Calendar.HOUR_OF_DAY,intent.getIntExtra("StartHour",0));
-//        startTime.set(Calendar.MINUTE,intent.getIntExtra("StartMinute",0));
-//
-//        Calendar endTime = (Calendar) startTime.clone();
-//        endTime.set(Calendar.YEAR, intent.getIntExtra("Year",2018));
-//        endTime.set(Calendar.MONTH, intent.getIntExtra("Month",12));
-//        endTime.set(Calendar.DAY_OF_MONTH, intent.getIntExtra("DayofMonth",0));
-//        endTime.set(Calendar.HOUR_OF_DAY,intent.getIntExtra("EndHour",0));
-//        endTime.set(Calendar.MINUTE,intent.getIntExtra("EndMinute",0));
-//
-//        WeekViewEvent event = new WeekViewEvent(100,intent.getStringExtra("Subject"),startTime,endTime);
-//        event.setLocation(intent.getStringExtra("Location"));
-//
-//        allEvents.add(event);
-//    }
 
-//    public List<WeekViewEvent> getAllEvents(){
-//        return allEvents;
-//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

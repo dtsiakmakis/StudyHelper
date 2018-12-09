@@ -101,7 +101,7 @@ public class Test_AutomaticEvent extends AppCompatActivity {
                     // get a Calendar and set the time to 14:00:00
                     Calendar startTime = Calendar.getInstance();
                     startTime.set(Calendar.HOUR_OF_DAY, 11);
-                    startTime.set(Calendar.MINUTE,33);
+                    startTime.set(Calendar.MINUTE,40);
 
 // get a Calendar at the current time
                     Calendar now = Calendar.getInstance();

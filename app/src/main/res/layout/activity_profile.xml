@@ -118,14 +118,6 @@
                 tools:layout_editor_absoluteY="196dp"
                 tools:targetApi="o" />
 
-        <ImageButton
-
-            android:layout_width="match_parent"
-            android:layout_height="91dp"
-            app:srcCompat="@android:color/holo_blue_dark"
-            tools:layout_editor_absoluteX="207dp"
-            tools:layout_editor_absoluteY="196dp" />
-
             <ImageButton
                 android:id="@+id/dashboard"
                 android:layout_width="120dp"

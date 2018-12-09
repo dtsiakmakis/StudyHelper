@@ -40,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Button studyLocations;
     private ImageButton userCalendar;
     private ImageButton dash;
+    private Button detectActivity;
+    private Button testEvents;
 
     private ImageView profilePicture;
     private Bitmap profilePic;
@@ -59,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity {
         preferences = findViewById(R.id.preferences);
         resources = findViewById(R.id.resource);
         dash = findViewById(R.id.dashboard);
+        detectActivity=(Button)findViewById(R.id.activity_detect);
+        testEvents=(Button) findViewById(R.id.test_events);
 
 
         user_name = (TextView)findViewById(R.id.user_name);
@@ -119,6 +123,28 @@ public class ProfileActivity extends AppCompatActivity {
                         mAuth.signOut();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
+                }
+            }
+        });
+
+        testEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v==testEvents){
+
+                        startActivity(new Intent(getApplicationContext(), Test_AutomaticEvent.class));
+
+                }
+            }
+        });
+
+        detectActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v==detectActivity){
+
+                        startActivity(new Intent(getApplicationContext(), Tracking.class));
+
                 }
             }
         });

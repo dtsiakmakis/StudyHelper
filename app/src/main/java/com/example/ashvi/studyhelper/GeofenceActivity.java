@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +42,21 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
 
 public class GeofenceActivity extends AppCompatActivity
         implements
@@ -54,6 +72,9 @@ public class GeofenceActivity extends AppCompatActivity
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
     private static final float GEOFENCE_RADIUS = 100.0f; // in meters
+    private boolean isFirstTime = true;
+
+    private Button showHeatMap;
 
     private LatLng latLng;
 
@@ -61,10 +82,13 @@ public class GeofenceActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
 
-    private TextView textLat, textLong;
-    private Button addGeofence, clearGeofence;
+    private TextView textLat, textLong, locationText;
+    private Button showLocation;
 
     private MapFragment mapFragment;
+    private HeatmapTileProvider mProvider;
+
+
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
     // Create a Intent send by the notification
@@ -80,8 +104,9 @@ public class GeofenceActivity extends AppCompatActivity
         setContentView(R.layout.activity_geofence);
         textLat = (TextView) findViewById(R.id.lat);
         textLong = (TextView) findViewById(R.id.lon);
-        addGeofence = findViewById(R.id.addGeofence);
-        clearGeofence = findViewById(R.id.clearGeofence);
+        showLocation = findViewById(R.id.showLocation);
+        locationText = findViewById(R.id.locationText);
+        showHeatMap = findViewById(R.id.showHeat);
 
 
         // initialize GoogleMaps
@@ -89,24 +114,58 @@ public class GeofenceActivity extends AppCompatActivity
 
         // create GoogleApiClient
         createGoogleApi();
-
-        addGeofence.setOnClickListener(new View.OnClickListener() {
+        showLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == addGeofence){
+                if (v == showLocation){
+                    try {
+                        locationText.setText(getAddressFromLocation());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
         });
-        clearGeofence.setOnClickListener(new View.OnClickListener() {
+        showHeatMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == clearGeofence){
-                    clearGeofence();
-
-                }
+                if (v == showHeatMap){
+                    addHeatMap();
+                    }
             }
         });
+
+    }
+    private void addHeatMap() {
+        List<LatLng> list = null;
+
+        // Get the data: latitude/longitude positions of police stations.
+        try {
+            list = readItems(R.raw.police_stations);
+        } catch (JSONException e) {
+            Toast.makeText(this, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
+        }
+
+        // Create a heat map tile provider, passing it the latlngs of the police stations.
+        mProvider = new HeatmapTileProvider.Builder()
+                .data(list)
+                .build();
+        // Add a tile overlay to the map, using the heat map tile provider.
+        TileOverlay mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+    }
+    private ArrayList<LatLng> readItems(int resource) throws JSONException {
+        ArrayList<LatLng> list = new ArrayList<LatLng>();
+        InputStream inputStream = getResources().openRawResource(resource);
+        String json = new Scanner(inputStream).useDelimiter("\\A").next();
+        JSONArray array = new JSONArray(json);
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            double lat = object.getDouble("lat");
+            double lng = object.getDouble("lng");
+            list.add(new LatLng(lat, lng));
+        }
+        return list;
     }
 
 
@@ -121,6 +180,15 @@ public class GeofenceActivity extends AppCompatActivity
                     .addApi( LocationServices.API )
                     .build();
         }
+    }
+    private String getAddressFromLocation() throws IOException {
+        Address address;
+        double lat = lastLocation.getLatitude();
+        double longi = lastLocation.getLongitude();
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocation(lat,longi,1);
+        address = addresses.get(0);
+        return address.getAddressLine(0);
     }
 
     @Override
@@ -233,8 +301,13 @@ public class GeofenceActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
+
         Log.d(TAG, "onLocationChanged ["+location+"]");
         lastLocation = location;
+        if(isFirstTime) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()), 6.0f));
+            isFirstTime = false;
+        }
         writeActualLocation(location);
     }
 

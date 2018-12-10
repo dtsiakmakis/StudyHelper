@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.android.gms.location.DetectedActivity;
 
@@ -44,7 +46,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityDetector {
 
-    public long start,stop;
+    public long start,stop=0;
     public Date current_date;
     public long tilting_time=0;
     public long still_time=0;
@@ -156,7 +158,10 @@ public class ActivityDetector {
                 }
             }
         };
+        start=System.currentTimeMillis();
 
+        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
+                new IntentFilter(Constants.BROADCAST_DETECTED_ACTIVITY));
 
 
 
@@ -192,7 +197,13 @@ public class ActivityDetector {
         event_updates.put("Stop Time",System.currentTimeMillis());
         event_updates.put("Still Time",still_time);
 
-        mDatabase.child("Study Sessions").child(uid).setValue(event_updates);
+        //mDatabase.child("Study Sessions").child(uid).setValue(event_updates);
+        DatabaseReference study_sessions=mDatabase.child("Study Sessions").child(uid);
+
+
+        DatabaseReference newRequestRef = study_sessions.child("Sessions").push();
+        newRequestRef.setValue(event_updates);
+
         Intent intent = new Intent(context, BackgroundDetectedActivitiesService.class);
         context.stopService(intent);
         String still=String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes(still_time),

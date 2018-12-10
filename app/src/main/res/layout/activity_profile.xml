@@ -18,6 +18,14 @@
             android:text="Detect Noise" />
 
         <Button
+            android:id="@+id/log_studying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Studying" />
+
+
+
+        <Button
             android:id="@+id/activity_detect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

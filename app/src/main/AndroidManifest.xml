@@ -59,7 +59,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".AreYouStudying"></activity>
+        <activity android:name=".AreYouStudying" />
+        <activity android:name=".Activity_Stats"></activity>
     </application>
 
 </manifest>

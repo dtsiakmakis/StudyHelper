@@ -11,6 +11,7 @@ import android.widget.Toast;
 public class AreYouStudying extends AppCompatActivity {
     ActivityDetector activityDetector;
     NoiseDetector noiseDetector;
+    private Button start_stud,stop_stud;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +20,8 @@ public class AreYouStudying extends AppCompatActivity {
         stop=(Button)findViewById(R.id.stop_loc);
         activityDetector= new ActivityDetector(getApplicationContext());
         noiseDetector = new NoiseDetector(getApplicationContext());
+        start_stud=(Button)findViewById(R.id.start_loc);
+        stop_stud=(Button)findViewById(R.id.stop_loc);
 
 
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -46,19 +49,29 @@ public class AreYouStudying extends AppCompatActivity {
             }
         };
 
-        stop.setOnClickListener(new View.OnClickListener() {
+
+
+        start_stud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityDetector.startTracking();
+                noiseDetector.start();
+
+            }
+        });
+        stop_stud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activityDetector.stopTracking();
-                //noiseDetector.stop();
+                noiseDetector.stop();
 
             }
         });
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you studying?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setMessage("Are you studying?").setPositiveButton("Yes", dialogClickListener)
+         //       .setNegativeButton("No", dialogClickListener).show();
 
        // AlertDialog alert = builder.create();
         //alert.show();

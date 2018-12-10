@@ -14,10 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.PercentFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +37,7 @@ public class AppUsageStats extends AppCompatActivity {
     private Context context;
     PackageManager packageManager;
     private BarChart chart;
-
+    private PieChart pieChart;
 
 
 
@@ -47,7 +52,8 @@ public class AppUsageStats extends AppCompatActivity {
         //PhoneUnlock = (TextView)findViewById(R.id.phone_unlock);
         ShowStats = (Button)findViewById(R.id.stats_button);
         //context=this.context;
-        chart = (BarChart) findViewById(R.id.chart);
+        //chart = (BarChart) findViewById(R.id.chart);
+        pieChart = (PieChart) findViewById(R.id.piechart);
         usageStatsManager=(UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
 
 
@@ -58,6 +64,7 @@ public class AppUsageStats extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v == permissionMessage){
+                    permissionMessage.setText("CLicked");
                     openSettings();
                 }
             }
@@ -110,16 +117,25 @@ public class AppUsageStats extends AppCompatActivity {
 
                 }
             }
-            permissionMessage.setText("App name :"+app.toString()+"\n Time Taken:"+app_time.toString());
+            //permissionMessage.setText("App name :"+app.toString()+"\n Time Taken:"+app_time.toString());
+            permissionMessage.setText("");
 
-
+            //Bar chart stuff
+            /*
             BarData data = new BarData(app, getDataSet(app_time));
             chart.setData(data);
             chart.setDescription("My Chart");
             chart.animateXY(2000, 2000);
             chart.invalidate();
 
+            */
+            pieChart.setUsePercentValues(true);
+            app.add("Studying");
+            PieData data = new PieData(app , getDataSet_pie(app_time));
+            data.setValueFormatter(new PercentFormatter());
 
+            pieChart.setData(data);
+            pieChart.setDrawSliceText(false);
 
 
 
@@ -131,6 +147,33 @@ public class AppUsageStats extends AppCompatActivity {
         }
 
 
+    }
+
+    private PieDataSet getDataSet_pie(List<Long> app_time) {
+
+        ArrayList<Entry> yvalues = new ArrayList<Entry>();
+        /*
+        yvalues.add(new Entry(8f, 0));
+        yvalues.add(new Entry(15f, 1));
+        yvalues.add(new Entry(12f, 2));
+        yvalues.add(new Entry(25f, 3));
+        yvalues.add(new Entry(23f, 4));
+        yvalues.add(new Entry(17f, 5));
+        */
+
+        long rem=7200000;
+        int counter=0;
+        for ( counter = 0; counter < app_time.size(); counter++) {
+            System.out.println(app_time.get(counter));
+            rem=rem-app_time.get(counter);
+            yvalues.add(new Entry(app_time.get(counter),counter));
+
+        }
+        yvalues.add(new Entry(rem,counter));
+
+        PieDataSet dataSet = new PieDataSet(yvalues, "App Usage");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        return dataSet;
     }
 
     private ArrayList<BarDataSet> getDataSet(List<Long> app_time) {
@@ -150,6 +193,8 @@ public class AppUsageStats extends AppCompatActivity {
         BarEntry v1e6 = new BarEntry(100.000f, 5); // Jun
         valueSet1.add(v1e6);
         */
+
+
         ArrayList<BarEntry> valueSet2 = new ArrayList<>();
         for (int counter = 0; counter < app_time.size(); counter++) {
             System.out.println(app_time.get(counter));

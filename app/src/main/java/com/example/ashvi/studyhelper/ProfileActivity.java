@@ -62,7 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
         preferences = findViewById(R.id.preferences);
         resources = findViewById(R.id.resource);
         dash = findViewById(R.id.dashboard);
-        detectActivity=(Button)findViewById(R.id.activity_detect);
         testEvents=(Button) findViewById(R.id.test_events);
         study_log=(Button) findViewById(R.id.log_studying);
 
@@ -71,8 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         profilePicture = findViewById(R.id.profile_image);
         profilePic = profilePicture.getDrawingCache();
-        noiseDetect = findViewById(R.id.noiseDetect);
-        studyLocations = findViewById(R.id.maps);
+//        noiseDetect = findViewById(R.id.noiseDetect);
         userCalendar = findViewById(R.id.calendar);
 
         askPermission();
@@ -149,17 +147,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
-        detectActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v==detectActivity){
-
-                        startActivity(new Intent(getApplicationContext(), Tracking.class));
-
-                }
-            }
-        });
         dash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,17 +194,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        noiseDetect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v == noiseDetect){
-                    if (user != null) {
-                        //Testing with MainActivity Class
-                        startActivity(new Intent(getApplicationContext(), DetectNoiseThread.class));
-                    }
-                }
-            }
-        });
         resources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,17 +201,6 @@ public class ProfileActivity extends AppCompatActivity {
                     if (user != null) {
                         //Testing with MainActivity Class
                         startActivity(new Intent(getApplicationContext(), Resources.class));
-                    }
-                }
-            }
-        });
-        studyLocations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v == studyLocations){
-                    if (user != null) {
-                        //Testing with MainActivity Class
-                        startActivity(new Intent(getApplicationContext(), GeofenceActivity.class));
                     }
                 }
             }

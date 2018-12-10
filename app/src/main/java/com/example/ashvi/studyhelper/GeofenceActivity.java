@@ -44,7 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
+import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import org.json.JSONArray;
@@ -138,17 +138,28 @@ public class GeofenceActivity extends AppCompatActivity
 
     }
     private void addHeatMap() {
+        int[] colors = {
+                Color.rgb(102, 225, 0), // green
+                Color.rgb(255, 0, 0)    // red
+        };
+
+        float[] startPoints = {
+                0.2f, 1f
+        };
+
+        Gradient gradient = new Gradient(colors, startPoints);
         List<LatLng> list = null;
 
         // Get the data: latitude/longitude positions of police stations.
         try {
-            list = readItems(R.raw.police_stations);
+            list = readItems(R.raw.study_locations);
         } catch (JSONException e) {
             Toast.makeText(this, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
         }
 
         // Create a heat map tile provider, passing it the latlngs of the police stations.
         mProvider = new HeatmapTileProvider.Builder()
+                .gradient(gradient)
                 .data(list)
                 .build();
         // Add a tile overlay to the map, using the heat map tile provider.

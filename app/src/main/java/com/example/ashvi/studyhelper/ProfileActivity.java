@@ -42,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton dash;
     private Button detectActivity;
     private Button testEvents;
+    private Button study_log;
 
     private ImageView profilePicture;
     private Bitmap profilePic;
@@ -63,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         dash = findViewById(R.id.dashboard);
         detectActivity=(Button)findViewById(R.id.activity_detect);
         testEvents=(Button) findViewById(R.id.test_events);
+        study_log=(Button) findViewById(R.id.log_studying);
 
 
         user_name = (TextView)findViewById(R.id.user_name);
@@ -113,6 +115,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        study_log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v==study_log){
+
+                    startActivity(new Intent(getApplicationContext(), AreYouStudying.class));
+
+                }
+            }
+        });
 
 
         logout.setOnClickListener(new View.OnClickListener() {

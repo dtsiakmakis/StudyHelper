@@ -170,6 +170,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v==userCalendar){
 
+
                     startActivity(new Intent(getApplicationContext(), CalendarActivity.class));
                 }
             }

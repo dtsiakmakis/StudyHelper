@@ -48,12 +48,9 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
     private ArrayList<String> repeat;
     CheckBox etMon, etTues, etWedn, etThur, etFri, etSat, etSun;
 
-   // private HashMap<SqlDataEnum, String> classData;
     private boolean updateOperation = false;
 
     //private static SqlLiteHelper mDB;
-    FirebaseDatabase fbdb;
-    DatabaseReference dbref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,12 +197,18 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
             int month = getIntent().getIntExtra("Month", Calendar.getInstance().get(Calendar.MINUTE));
             int endHour = getIntent().getIntExtra("EndHour", Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             int endMinute = getIntent().getIntExtra("EndMinute", Calendar.getInstance().get(Calendar.MINUTE));
-            String userName = getIntent().getStringExtra("USERNAME");
             String description = getIntent().getStringExtra("Description");
-            int nexEventID =getIntent().getIntExtra("nextEventID", Calendar.getInstance().get(Calendar.MINUTE));
+            int eventID = getIntent().getIntExtra("nextEventID",0);
             if (description==null){
                 description="";
             }
+
+            event = new WeekViewEvent(eventID,subject,year,month,dayofMonth,startHour,startMinute,year,month,dayofMonth,endHour,endMinute);
+            event.setColor(getIntent().getIntExtra("Color",0));
+            event.setLocation(location);
+
+
+
 
             String startTime = String.format("%02d:%02d",startHour,startMinute);
             String endTime = String.format("%02d:%02d",endHour,endMinute);
@@ -230,6 +233,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         etDayofMonth.setText(day);
         etStartTime.setText(startTime);
         etEndTime.setText(endTime);
+
    }
 
     private void setEditTexts() {
@@ -255,8 +259,9 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setDBInstance(){
-         fbdb= FirebaseDatabase.getInstance();
-         dbref = fbdb.getReference();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser= mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     private void validateStartTimeInput() {
@@ -331,12 +336,13 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         Log.d(TAG,  "Going back to RegisterActivity");
         Intent intent = new Intent(this, CalendarActivity.class);
 
-        mDatabase= FirebaseDatabase.getInstance().getReference();
+        //mDatabase= FirebaseDatabase.getInstance().getReference();
         //Setting on Click on the Done button. Here the data entered should be sent to the database.
-
         //Getting current user
-        mAuth=FirebaseAuth.getInstance();
-        currentUser=mAuth.getCurrentUser();
+        //mAuth=FirebaseAuth.getInstance();
+        //currentUser=mAuth.getCurrentUser();
+
+
         String uid=currentUser.getUid();
 
         DatabaseReference cal_ref = mDatabase.child("Calendar_Events");
@@ -348,55 +354,36 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         event_updates.put("Year",event.getStartTime().get(Calendar.YEAR));
 
 
+        String eventID = String.format("%d",getIntent().getIntExtra("nextEventID",0));
+        Log.d(TAG,"NEW EVENT'S ID IS "+eventID);
 
-
-        event_updates.put("StartHour",event.getStartTime().get(Calendar.HOUR_OF_DAY));
-        event_updates.put("StartMinute",event.getStartTime().get(Calendar.MINUTE));
-        event_updates.put("Month", event.getStartTime().get(Calendar.MONTH));
-        event_updates.put("DayofMonth",event.getStartTime().get(Calendar.DAY_OF_MONTH));
-        event_updates.put("EndHour",event.getEndTime().get(Calendar.HOUR_OF_DAY));
-        event_updates.put("EndMinute",event.getEndTime().get(Calendar.MINUTE));
+        event_updates.put("StartTime",event.getStartTime());
+        event_updates.put("EndTime",event.getEndTime());
         event_updates.put("Location",event.getLocation());
         event_updates.put("Subject",event.getName());
         event_updates.put("Frequency",repeat.toString());
-
-
-
+        event_updates.put("ID",eventID);
+        event_updates.put("Color",event.getColor());
 
         //mDatabase.child("User_details").child(uid).child("Calendar_events").setValue(event_updates);
 
-        mDatabase.child("Calendar_Events").child(uid).child("Events").setValue(event_updates);
+        mDatabase.child("Calendar_Events").child(uid).child(eventID).setValue(event_updates);
 
 
-        intent.putExtra("Year", event.getStartTime().get(Calendar.YEAR))
-                .putExtra("StartHour",event.getStartTime().get(Calendar.HOUR_OF_DAY))
-                .putExtra("StartMinute",event.getStartTime().get(Calendar.MINUTE))
-                .putExtra("Month", event.getStartTime().get(Calendar.MONTH))
-                .putExtra("DayofMonth",event.getStartTime().get(Calendar.DAY_OF_MONTH))
-                .putExtra("EndHour",event.getEndTime().get(Calendar.HOUR_OF_DAY))
-                .putExtra("EndMinute",event.getEndTime().get(Calendar.MINUTE))
-                .putExtra("Location",event.getLocation())
-                .putExtra("Subject",event.getName())
-                .putExtra("Color",event.getColor())
-                .putExtra("isNewEvent",true)
-                .putExtra("Frequency",repeat.toString());
+//        intent.putExtra("Year", event.getStartTime().get(Calendar.YEAR))
+//                .putExtra("StartHour",event.getStartTime().get(Calendar.HOUR_OF_DAY))
+//                .putExtra("StartMinute",event.getStartTime().get(Calendar.MINUTE))
+//                .putExtra("Month", event.getStartTime().get(Calendar.MONTH))
+//                .putExtra("DayofMonth",event.getStartTime().get(Calendar.DAY_OF_MONTH))
+//                .putExtra("EndHour",event.getEndTime().get(Calendar.HOUR_OF_DAY))
+//                .putExtra("EndMinute",event.getEndTime().get(Calendar.MINUTE))
+//                .putExtra("Location",event.getLocation())
+//                .putExtra("Subject",event.getName())
+//                .putExtra("Color",event.getColor())
+//                .putExtra("isNewEvent",true)
+//                .putExtra("Frequency",repeat.toString());
 
 
-//        String returnedToMain = String.format("The event sent to mainActivity is on %02d/%02d/%02d,  from %02d:%02d %s to %02d:%02d %s, located at %s, subject is %s"
-//                ,event.getStartTime().get(Calendar.MONTH)+1
-//                ,event.getStartTime().get(Calendar.DAY_OF_MONTH)
-//                , event.getStartTime().get(Calendar.YEAR)
-//                ,event.getStartTime().get(Calendar.HOUR_OF_DAY)
-//                ,event.getStartTime().get(Calendar.MINUTE)
-//                ,event.getStartTime().get(Calendar.AM_PM)
-//                ,event.getEndTime().get(Calendar.HOUR_OF_DAY)
-//                ,event.getEndTime().get(Calendar.MINUTE)
-//                ,event.getEndTime().get(Calendar.AM_PM)
-//                ,event.getLocation()
-//                ,event.getName()
-//        );
-//
-//        Log.d("Adding new Event",returnedToMain);
 
         startActivity(intent);
     }
@@ -405,6 +392,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         //Log.d(TAG,"subject is "+etSubject);
         //Log.d(TAG,"day is "+etDayofMonth);
         event.setName(etSubject.getText().toString().trim());
+        event.setId(getIntent().getLongExtra("ID",0));
         //event.setColor(Color.parseColor("#"+etColor.getText().toString().trim()));
 
         String startTimeString = etStartTime.getText().toString().trim();
@@ -412,10 +400,9 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         String ymd = etDayofMonth.getText().toString().trim();
 
 
-        //Log.d("SettingEventStartTime",startTimeString);
-        //Log.d("SettingEventEndTime",endTimeString);
-        //Log.d("mm",ymd.substring(0,2));
-        //Log.d("dd",ymd.substring(3,5));
+        Log.d(TAG,"Starting at "+startTimeString);
+        Log.d(TAG,"To "+ endTimeString);
+        Log.d(TAG,ymd.substring(3,5));
 
         String dayOfMonth = ymd.substring(3,5);
         Calendar startTime = Calendar.getInstance();
@@ -436,7 +423,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         event.setEndTime((Calendar) endTime.clone());
         event.setLocation(etLocation.getText().toString().trim());
         event.setName(etSubject.getText().toString().trim());
-
+        event.setId(getIntent().getIntExtra("nextEventID",0));
 
 
 
@@ -466,7 +453,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private static Map<Integer, Integer> getARGBfromHexNumber(String hexNumber) {
+        private static Map<Integer, Integer> getARGBfromHexNumber(String hexNumber) {
         Log.d("lol5", hexNumber);
         long dec = Long.parseLong(hexNumber, 16);
         Map<Integer, Integer> colors = new HashMap<>();

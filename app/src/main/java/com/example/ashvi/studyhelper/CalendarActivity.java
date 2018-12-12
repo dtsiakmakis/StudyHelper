@@ -7,31 +7,45 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-
-
-
+import java.util.Map;
 
 
 public class CalendarActivity  extends BaseActivity {
 
-    FirebaseDatabase fbdb;
-    DatabaseReference dbref;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private DatabaseReference mDatabase;
+
+    private  ArrayList<WeekViewEvent> eventsFromDB;
+    private ArrayList<WeekViewEvent> eventsFromLocal;
+    private ArrayList<Map<String,Object>> dataFromDB;
+
+
     public static final String[] INSTANCE_PROJECTION = new String[] {
             CalendarContract.Instances.EVENT_ID, // 0
             CalendarContract.Instances.BEGIN, // 1
@@ -54,8 +68,6 @@ public class CalendarActivity  extends BaseActivity {
 
     List<WeekViewEvent> events = new ArrayList<>();;
 
-    private int callingTime =1;
-
     private int nextEventID;
 
     private static final String TAG ="MAIN_DEBUG";
@@ -63,80 +75,37 @@ public class CalendarActivity  extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        getEventsFromFB();
+        getLocalEvents();
+
         super.onCreate(savedInstanceState);
-        fbdb= FirebaseDatabase.getInstance();
-        dbref = fbdb.getReference();
-        if(getIntent().getBooleanExtra("isNewEvent", false)){
-            Log.d("Main","Not None!");
-            WeekViewEvent newEvent = makeEventFromIntent();
-            Log.d("newEvent From Intent",newEvent.getName());
-            Log.d("new Event month",String.format("%d",newEvent.getStartTime().get(Calendar.MONTH)));
-            events.add(newEvent);
-        }
+
+        //Log.d(TAG,String.format("got %d events from database",eventsFromDB.size()));
     }
 
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth){
-        //why is this called 3 times?
-
-        //to log how many time this function is called.
-        // so this is called for this month, last month, and next month,
-        // and then return them to the view
-        // So here, we check the events from db and local, to see if them in those month and them just return them to the view
-
-        //Log.d(TAG,String.format("This function is being called for the %d time",callingTime++));
-
-        // so we need to clear the old events and then add the ones with the correct mm/yy to the view
         List<WeekViewEvent> eventsForView = getEvents(newYear,newMonth);
-
+        Log.d(TAG,String.format("OnMonthChange Called,year:%d,month%d got %d events from db and local",newYear,newMonth,eventsForView.size()));
         //example event
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        WeekViewEvent event = new WeekViewEvent(nextEventID, "testEvent", startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_01));
-        eventsForView.add(event);
+//        Calendar startTime = Calendar.getInstance();
+//        startTime.set(Calendar.HOUR_OF_DAY, 3);
+//        startTime.set(Calendar.MINUTE, 0);
+//        startTime.set(Calendar.MONTH, newMonth - 1);
+//        startTime.set(Calendar.YEAR, newYear);
+//        Calendar endTime = (Calendar) startTime.clone();
+//        endTime.add(Calendar.HOUR, 1);
+//        endTime.set(Calendar.MONTH, newMonth - 1);
+//        WeekViewEvent event = new WeekViewEvent(nextEventID, "testEvent", startTime, endTime);
+//        event.setColor(getResources().getColor(R.color.event_color_01));
+//        eventsForView.add(event);
 
 
-        //events.addAll(getLocalEvents(newYear,newMonth));
-
-
-        nextEventID += eventsForView.size();
         return eventsForView;
     }
-
-    private WeekViewEvent makeEventFromIntent(){
-        Intent intent = getIntent();
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, intent.getIntExtra("StartHour",0));
-        startTime.set(Calendar.MINUTE, intent.getIntExtra("StartMinute",0));
-        startTime.set(Calendar.MONTH, intent.getIntExtra("Month",12));
-        //startTime.set(Calendar.YEAR, intent.getIntExtra("Year",2018));
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, intent.getIntExtra("EndHour",0));
-        endTime.set(Calendar.MONTH, intent.getIntExtra("EndMinute",0));
-        endTime.set(Calendar.MONTH, intent.getIntExtra("Month",12));
-        //endTime.set(Calendar.YEAR, intent.getIntExtra("Year",2018));
-
-        String frequency = intent.getStringExtra("Frequency");
-        Log.d(TAG,"repeat"+frequency);
-        if (frequency.contains("Monday")){
-            //startTime.set(Calendar.DAY_OF_WEEK,1);
-            //endTime.set(Calendar.DAY_OF_WEEK,1);
-        }
-
-        WeekViewEvent event = new WeekViewEvent(1, intent.getStringExtra("Subject"),intent.getStringExtra("Location"), startTime, endTime);
-        event.setColor(intent.getIntExtra("Color",intent.getIntExtra("Color",R.color.event_color_01)));
-
-
-        return event;
-    }
-
 
 //
 //
@@ -170,7 +139,7 @@ public class CalendarActivity  extends BaseActivity {
                 .putExtra("EndHour",event.getEndTime().get(Calendar.HOUR_OF_DAY))
                 .putExtra("EndMinute",event.getEndTime().get(Calendar.MINUTE))
                 .putExtra("USERNAME","testUserName")
-                .putExtra("nextEventID",nextEventID);
+                .putExtra("nextEventID",event.getId());
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -196,11 +165,11 @@ public class CalendarActivity  extends BaseActivity {
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
         //TODO delete the event when long press
-        showEventLongPressAlear(event);
+        showEventLongPressAlert(event);
         Toast.makeText(this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
-    private void showEventLongPressAlear(WeekViewEvent event){
+    private void showEventLongPressAlert(WeekViewEvent event){
         final WeekViewEvent toBeDeleted = event;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -208,7 +177,7 @@ public class CalendarActivity  extends BaseActivity {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
-                        deleteEventFromDB(toBeDeleted);
+                        deleteEventFromDB(toBeDeleted.getId());
                         finish();
                         Intent intent = new Intent(CalendarActivity.this, CalendarActivity.class);
                         startActivity(intent);
@@ -225,8 +194,11 @@ public class CalendarActivity  extends BaseActivity {
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
-    private void deleteEventFromDB(WeekViewEvent event){
+    private void deleteEventFromDB(long eventID){
         //TODO delete event from database
+        String uid = currentUser.getUid();
+        mDatabase.child("Calendar_Events").child(uid).child(String.valueOf(eventID)).removeValue();
+        startActivity(getIntent());
     }
 
     @Override
@@ -237,13 +209,13 @@ public class CalendarActivity  extends BaseActivity {
 
     private void showEmptyAlert(Calendar time){
         final Intent toAddIntent = new Intent(this,AddNewEvent.class);
+        Log.d(TAG,String.format("Inside showEmptyAlert NextEventID %d",nextEventID));
         toAddIntent.putExtra("Year", time.get(Calendar.YEAR))
                 .putExtra("StartHour",time.get(Calendar.HOUR_OF_DAY))
                 .putExtra("StartMinute",time.get(Calendar.MINUTE))
                 .putExtra("Month", time.get(Calendar.MONTH)+1)
                 .putExtra("DayofMonth",time.get(Calendar.DAY_OF_MONTH))
-                .putExtra("USERNAME","testUserName")
-                .putExtra("neexEventID",nextEventID);
+                .putExtra("nextEventID",nextEventID);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -273,35 +245,255 @@ public class CalendarActivity  extends BaseActivity {
 
 
     private List<WeekViewEvent> getEvents(int newYear, int newMonth){
-        List<WeekViewEvent> updatedEvents = new ArrayList<WeekViewEvent>();
-        updatedEvents.addAll(getLocalEvents(newYear,newMonth));
-        //updatedEvents.addAll(getEventsFromFB(newYear,newMonth));
-        for(WeekViewEvent event:events) {
-            if (event.getStartTime().get(Calendar.MONTH) == newMonth && event.getStartTime().get(Calendar.YEAR) == newYear) {
+
+        List<WeekViewEvent> updatedEvents = new ArrayList<>();
+
+
+        for(WeekViewEvent event:eventsFromDB) {
+            if (event.getStartTime().get(Calendar.MONTH) == newMonth-1 && event.getStartTime().get(Calendar.YEAR) == newYear) {
+                Log.d(TAG,"Inside getEvents: data from db added!");
                 updatedEvents.add(event);
             }
         }
+
+        for(WeekViewEvent event:eventsFromLocal) {
+            if (event.getStartTime().get(Calendar.MONTH) == newMonth-1 && event.getStartTime().get(Calendar.YEAR) == newYear) {
+                updatedEvents.add(event);
+            }
+        }
+
+
+
         return updatedEvents;
     }
 
-    private  List<WeekViewEvent> getEventsFromFB(int newYear, int newMonth){
+    private  void getEventsFromFB(){
         //TODO get data from database
+        String uid = currentUser.getUid();
+        eventsFromDB = new ArrayList<>();
+        dataFromDB = new ArrayList<>();
+        DatabaseReference userCalendar = mDatabase.child("Calendar_Events").child(uid);
 
-        return new ArrayList<WeekViewEvent>();
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null){
+                    dataFromDB.addAll((ArrayList<Map<String,Object>>)  dataSnapshot.getValue());
+                }
+                for(Map<String,Object> uEvent:dataFromDB) {
+                    if(uEvent!=null){
+                        Log.d(TAG,"Inside onDataChange, got sth from db: "+uEvent.toString());
+                        Map startMap = (Map<String, Object>) uEvent.get("StartTime");
+                        Map endMap = (Map<String, Object>) uEvent.get("EndTime");
+                        Calendar startTime = Calendar.getInstance();
+                        startTime.setTimeInMillis(Long.parseLong(String.valueOf(startMap.get("timeInMillis"))));
+                        Calendar endTime = Calendar.getInstance();
+                        endTime.setTimeInMillis(Long.parseLong(String.valueOf(endMap.get("timeInMillis"))));
+                        String freq = (String) uEvent.get("Frequency");
+
+
+
+                        WeekViewEvent toAdd = new WeekViewEvent(Integer.parseInt((String) uEvent.get("ID")), (String) uEvent.get("Subject"), (String) uEvent.get("Location"), startTime, endTime);
+                        toAdd.setColor(Integer.parseInt(String.valueOf(uEvent.get("Color"))));
+                        Log.d(TAG,"Inside function getEventsFromFB: Adding new event from DB to the view," +
+                                "it's "+toAdd.getName()+" at "+toAdd.getLocation()+" starts from year " +
+                                String.valueOf(toAdd.getStartTime().get(Calendar.YEAR)) +
+                                String.valueOf(toAdd.getStartTime().get(Calendar.MONTH)) +
+                                String.valueOf(toAdd.getStartTime().get(Calendar.DAY_OF_MONTH)) +
+                                " to "+ String.valueOf(toAdd.getStartTime().get(Calendar.YEAR)) +
+                                String.valueOf(toAdd.getStartTime().get(Calendar.MONTH)) +
+                                String.valueOf(toAdd.getStartTime().get(Calendar.DAY_OF_MONTH)) +
+                                "colored with "+ toAdd.getColor()+
+                                "repeat on" +freq);
+                        eventsFromDB.add(toAdd);
+                        if(freq.length()>2){
+                            Log.d(TAG,String.format("Repeat test, got freq as "+freq));
+                            eventsFromDB.addAll(makeRepeatEvents(freq,toAdd));
+                        }
+
+
+                        nextEventID = Math.max(dataFromDB.size(),(int)toAdd.getId()+1);
+
+                    }
+
+
+
+//                    Log.d(TAG,String.format("WORKING? %d",eventsFromDB.size()));
+//                    Log.d(TAG,String.format("NextEventID %d",nextEventID));
+//                    Log.d(TAG,String.format("WORKING? %s",eventsFromDB.get(0).getLocation()));
+                }
+
+
+
+
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        userCalendar.addValueEventListener(postListener);
+
+//        new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                ArrayList<Map<String,Object>> value =(ArrayList<Map<String,Object>>)  dataSnapshot.getValue();
+//                if (value!=null){
+//                    for(Map<String,Object> uEvent:value){
+//                        Map startMap =(Map<String,Object>) uEvent.get("StartTime");
+//                        Map endMap = (Map<String,Object>)uEvent.get("EndTime");
+//                        Calendar startTime = Calendar.getInstance();
+//                        startTime.setTimeInMillis(Long.parseLong(String.valueOf(startMap.get("timeInMillis"))));
+//                        Calendar endTime = Calendar.getInstance();
+//                        endTime.setTimeInMillis(Long.parseLong(String.valueOf(endMap.get("timeInMillis"))));
+//
+//                        WeekViewEvent toAdd = new WeekViewEvent(Integer.parseInt((String)uEvent.get("ID")),(String)uEvent.get("Subject"),(String)uEvent.get("Location"),startTime,endTime);
+//                        //toAdd.setColor(Long.parseLong(String.valueOf(uEvent.get("Color"))));
+//                        toAdd.setColor(R.color.event_color_02);
+//
+//                        Log.d(TAG,"Adding new event from DB to the view," +
+//                                "it's "+toAdd.getName()+" at "+toAdd.getLocation()+" starts from " +
+//                                toAdd.getStartTime().toString() + " to "+ toAdd.getEndTime().toString() +
+//                                "colored with "+ toAdd.getColor());
+//                        eventsFromDB.add(toAdd);
+//                        Log.d(TAG,String.format("database called, got %d events from DB",eventsFromDB.size()));
+//
+//
+//                    }
+//
+//                }
+//                else{
+//                    Log.d(TAG,"None");
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.w(TAG, "Failed to read value.", error.toException());
+//            }
+//
+//
+//        }
+
+    }
+
+    private List<WeekViewEvent> makeRepeatEvents(String freq,WeekViewEvent eve){
+        List<WeekViewEvent> res = new ArrayList<>();
+        res.add(eve);
+        Calendar startDate = eve.getStartTime();
+        Calendar endTime = eve.getEndTime();
+        //endTime.add(Calendar.DAY_OF_YEAR,1);
+        //startDate.add(Calendar.DAY_OF_YEAR,1);
+        Calendar endDate = (Calendar)startDate.clone();
+        endDate.add(Calendar.MONTH,6);
+        Log.d(TAG,"Inside the Freq test, the start date of the repeat is "+startDate.getTime().toString());
+        Log.d(TAG,"Inside the Freq test, the end date of the repeat is "+endDate.getTime().toString());
+
+        // first add this event to the res
+
+
+
+
+        while(startDate.getTimeInMillis()!=endDate.getTimeInMillis()){
+            Calendar tmpStartForEve = (Calendar)startDate.clone();
+            Calendar tmpEndForEve = (Calendar)endTime.clone();
+            switch(startDate.get(Calendar.DAY_OF_WEEK)){
+                case 1: // Sunday
+                    if(freq.contains("Sunday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 2: // Monday
+                    if(freq.contains("Monday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 3: // Tuesday
+                    if(freq.contains("Tuesday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 4: // Wednesday
+                    if(freq.contains("Wednesday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 5: // Thursday
+                    if(freq.contains("Thursday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 6: // Friday
+                    if(freq.contains("Friday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 7: // Saturday
+                    if(freq.contains("Saturday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+            }
+            startDate.add(Calendar.DAY_OF_YEAR,1);
+            endTime.add(Calendar.DAY_OF_YEAR,1);
+
+        }
+
+        for(WeekViewEvent wve:res){
+            Log.d(TAG,"Inside function makeRepeatEvents: figuring out whats wrong," +
+                    "it's "+wve.getName()+" at "+wve.getLocation()+" starts from year " +
+                    String.valueOf(wve.getStartTime().get(Calendar.YEAR)) +
+                    String.valueOf(wve.getStartTime().get(Calendar.MONTH)) +
+                    String.valueOf(wve.getStartTime().get(Calendar.DAY_OF_MONTH)) +
+                    " to "+ String.valueOf(wve.getStartTime().get(Calendar.YEAR)) +
+                    String.valueOf(wve.getStartTime().get(Calendar.MONTH)) +
+                    String.valueOf(wve.getStartTime().get(Calendar.DAY_OF_MONTH)) +
+                    "colored with "+ wve.getColor()+
+                    "repeat on" +freq);
+        }
+
+
+
+        return res;
+
+
+
+
+
     }
 
 
-    private List<WeekViewEvent> getLocalEvents(int newYear, int newMonth){
-        List<WeekViewEvent> localEvents = new ArrayList<>();
+
+    private void getLocalEvents(){
+        eventsFromLocal = new ArrayList<>();
         if (checkSelfPermission(Manifest.permission.READ_CALENDAR)!= PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{Manifest.permission.READ_CALENDAR}, callbackID);
         }else{
             Calendar beginTime = Calendar.getInstance();
-            beginTime.set(newYear,newMonth,1,0,0,0);
+            beginTime.set(2018,0,1,0,0,0);
             long startMillis = beginTime.getTimeInMillis();
 
             Calendar endTime = Calendar.getInstance();
-            endTime.set(newYear,newMonth+1,1,0,0,0);
+            endTime.set(2019,12,28,0,0,0);
             long endMillis = endTime.getTimeInMillis(); //now + 12 hours. Fixing the end time to something
 
 
@@ -330,7 +522,7 @@ public class CalendarActivity  extends BaseActivity {
 
                 firstFound = true;
 
-                localEvents.add(toWeekViewEvent(eventId,beginVal,endVal,title,description,color,location));
+                eventsFromLocal.add(toWeekViewEvent(eventId,beginVal,endVal,title,description,color,location));
 
             }
             if(!firstFound){
@@ -338,8 +530,6 @@ public class CalendarActivity  extends BaseActivity {
             }
 
         }
-
-        return localEvents;
 
     }
 

@@ -3,6 +3,7 @@ package com.example.ashvi.studyhelper;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button detectActivity;
     private Button testEvents;
     private Button study_log;
+    int RECORD_AUDIO = 0;
 
     private ImageView profilePicture;
     private Bitmap profilePic;
@@ -74,6 +76,11 @@ public class ProfileActivity extends AppCompatActivity {
         userCalendar = findViewById(R.id.calendar);
 
         askPermission();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    RECORD_AUDIO);
+        }
 
 
 
@@ -162,6 +169,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v==userCalendar){
+
 
                     startActivity(new Intent(getApplicationContext(), CalendarActivity.class));
                 }

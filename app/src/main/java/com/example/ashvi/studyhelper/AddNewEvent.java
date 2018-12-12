@@ -26,6 +26,7 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
@@ -44,6 +45,10 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
     private AlarmManager manager;
     private PendingIntent pendingIntent;
     private static final String TAG = "ADD_NEW_EVENT_DEBUG";
+    @Exclude
+    Calendar startTime;
+    @Exclude
+    Calendar endTime;
 
     //public final static int ADD_NEW_CLASS = 1;
 
@@ -326,6 +331,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    @Exclude
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.btn_add_new_class) {
             Log.d(TAG,"no crush");
@@ -338,6 +344,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         return super.onOptionsItemSelected(item);
     }
 
+    @Exclude
     private void goBackToTimetableActivity() {
         Log.d(TAG,  "Going back to MainActivity");
         Intent intent = new Intent(this, CalendarActivity.class);
@@ -389,7 +396,7 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
 
         startActivity(intent);
     }
-
+    @Exclude
     private void addDataFromInputs() {
         //Log.d(TAG,"subject is "+etSubject);
         //Log.d(TAG,"day is "+etDayofMonth);
@@ -407,7 +414,8 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         Log.d(TAG,ymd.substring(3,5));
 
         String dayOfMonth = ymd.substring(3,5);
-        Calendar startTime = Calendar.getInstance();
+
+        startTime = Calendar.getInstance();
         startTime.set(Calendar.YEAR, Integer.parseInt(ymd.substring(ymd.length()-4,ymd.length())));
         startTime.set(Calendar.MONTH, Integer.parseInt(ymd.substring(0,2))-1);
         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayOfMonth));
@@ -416,7 +424,8 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         event.setStartTime((Calendar) startTime.clone());
         //Log.d("ymd new",ymd.substring(3,5));
 
-        Calendar endTime = Calendar.getInstance();
+
+        endTime = Calendar.getInstance();
         endTime.set(Calendar.YEAR, Integer.parseInt(ymd.substring(ymd.length()-4,ymd.length())));
         endTime.set(Calendar.MONTH, Integer.parseInt(ymd.substring(0,2))-1);
         endTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayOfMonth));

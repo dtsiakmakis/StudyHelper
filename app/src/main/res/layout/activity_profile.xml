@@ -9,22 +9,17 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
         android:layout_height="match_parent">
+
 
         <Button
             android:id="@+id/log_studying"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Log Studying" />
-
-
-        <Button
-            android:id="@+id/test_events"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="Test Event" />
+            android:backgroundTint="#0ABBB5"
+            android:text="Track Study" />
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_image"
@@ -47,84 +42,89 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/preferences"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:background="@drawable/round"
-                android:backgroundTint="#0ABBB5"
-                android:src="@drawable/settings"
-                android:text="Preferences"
-                android:tooltipText="Preferences"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="207dp"
-                tools:layout_editor_absoluteY="196dp"
-                tools:targetApi="o" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/calendar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:background="@drawable/round"
-                android:tooltipText="Calendar"
-                android:backgroundTint="#0ABBB5"
-                android:src="@drawable/calendar"
-                android:layout_marginStart="40dp"
-                android:text="My Calendar"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="207dp"
-                tools:layout_editor_absoluteY="196dp"
-                tools:targetApi="o" />
+                <ImageButton
+                    android:id="@+id/preferences"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round"
+                    android:backgroundTint="#0ABBB5"
+                    android:src="@drawable/settings"
+                    android:text="Preferences"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:tooltipText="Preferences"
+                    tools:layout_editor_absoluteX="207dp"
+                    tools:layout_editor_absoluteY="196dp"
+                    tools:targetApi="o" />
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/calendar"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round"
+                    android:backgroundTint="#0ABBB5"
+                    android:src="@drawable/calendar"
+                    android:text="My Calendar"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:tooltipText="Calendar"
+                    tools:layout_editor_absoluteX="207dp"
+                    tools:layout_editor_absoluteY="196dp"
+                    tools:targetApi="o" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/resource"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:background="@drawable/round"
-                android:backgroundTint="#0ABBB5"
-                android:src="@drawable/resource"
-                android:tooltipText="Resources"
-                android:text="Resources"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="207dp"
-                tools:layout_editor_absoluteY="196dp"
-                tools:targetApi="o" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/dashboard"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginStart="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/round"
-                android:backgroundTint="#0ABBB5"
-                android:src="@drawable/dashboard"
-                android:tooltipText="Dashboard"
-                android:text="Dashboard"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="207dp"
-                tools:layout_editor_absoluteY="196dp"
-                tools:targetApi="o" />
+                <ImageButton
+                    android:id="@+id/resource"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round"
+                    android:backgroundTint="#0ABBB5"
+                    android:src="@drawable/resource"
+                    android:text="Resources"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:tooltipText="Resources"
+                    tools:layout_editor_absoluteX="207dp"
+                    tools:layout_editor_absoluteY="196dp"
+                    tools:targetApi="o" />
+
+                <ImageButton
+                    android:id="@+id/dashboard"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round"
+                    android:backgroundTint="#0ABBB5"
+                    android:src="@drawable/dashboard"
+                    android:text="Dashboard"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:tooltipText="Dashboard"
+                    tools:layout_editor_absoluteX="207dp"
+                    tools:layout_editor_absoluteY="196dp"
+                    tools:targetApi="o" />
+            </LinearLayout>
         </LinearLayout>
 
         <ImageButton

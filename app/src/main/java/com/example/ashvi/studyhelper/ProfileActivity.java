@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         preferences = findViewById(R.id.preferences);
         resources = findViewById(R.id.resource);
         dash = findViewById(R.id.dashboard);
-        testEvents=(Button) findViewById(R.id.test_events);
+//        testEvents=(Button) findViewById(R.id.test_events);
         study_log=(Button) findViewById(R.id.log_studying);
 
 
@@ -144,16 +144,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        testEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v==testEvents){
-
-                        startActivity(new Intent(getApplicationContext(), Test_AutomaticEvent.class));
-
-                }
-            }
-        });
+//        testEvents.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (v==testEvents){
+//
+//                        startActivity(new Intent(getApplicationContext(), Test_AutomaticEvent.class));
+//
+//                }
+//            }
+//        });
         dash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

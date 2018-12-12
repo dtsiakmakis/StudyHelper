@@ -51,6 +51,7 @@ public class ActivityDetector {
     public long tilting_time=0;
     public long still_time=0;
     public long foot_time=0;
+    public long walking_time=0;
     public BroadcastReceiver broadcastReceiver;
     public Context context;
     public FirebaseAuth mAuth;
@@ -129,6 +130,10 @@ public class ActivityDetector {
                 }
                 case DetectedActivity.WALKING: {
                     label = context.getString(R.string.activity_walking);
+
+                    stop = System.currentTimeMillis();
+                    walking_time=walking_time+(stop-start);
+                    start = System.currentTimeMillis();
                     break;
                 }
                 case DetectedActivity.UNKNOWN: {
@@ -196,6 +201,8 @@ public class ActivityDetector {
 
         event_updates.put("Stop Time",System.currentTimeMillis());
         event_updates.put("Still Time",still_time);
+        event_updates.put("Walking",walking_time);
+        event_updates.put("Tilting",tilting_time);
 
         //mDatabase.child("Study Sessions").child(uid).setValue(event_updates);
         DatabaseReference study_sessions=mDatabase.child("Study Sessions").child(uid);

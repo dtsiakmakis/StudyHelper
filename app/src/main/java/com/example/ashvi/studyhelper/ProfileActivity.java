@@ -76,11 +76,6 @@ public class ProfileActivity extends AppCompatActivity {
         userCalendar = findViewById(R.id.calendar);
 
         askPermission();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    RECORD_AUDIO);
-        }
 
 
 
@@ -215,10 +210,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
     private void askPermission() {
-        Log.d("tag", "askPermission()");
+//        Log.d("tag", "askPermission()");
         ActivityCompat.requestPermissions(
                 this,
                 new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                REQ_PERMISSION
+        );
+    }
+    private void askSoundPermission() {
+//        Log.d("tag", "askPermission()");
+        ActivityCompat.requestPermissions(
+                this,
+                new String[] { Manifest.permission.RECORD_AUDIO },
                 REQ_PERMISSION
         );
     }

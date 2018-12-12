@@ -10,10 +10,10 @@
         android:id="@+id/youtube"
         android:layout_width="70dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginTop="36dp"
-        android:text="Go"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#0ABBB5"
+        android:text="Go"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,10 +23,10 @@
         android:layout_height="40dp"
         android:layout_marginEnd="9dp"
         android:layout_marginTop="40dp"
-        android:text="Go"
         android:backgroundTint="#0ABBB5"
+        android:text="Go"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.944"
+        app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -35,11 +35,11 @@
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_marginEnd="9dp"
-        android:layout_marginTop="56dp"
-        android:text="Go"
+        android:layout_marginTop="52dp"
         android:backgroundTint="#0ABBB5"
+        android:text="Go"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintHorizontal_bias="0.857"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -136,12 +136,13 @@
         android:id="@+id/quizlet"
         android:layout_width="70dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="9dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginTop="56dp"
         android:backgroundTint="#0ABBB5"
         android:text="Go"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.781"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/wolfram" />
 
@@ -172,12 +173,13 @@
         android:id="@+id/sparknotes"
         android:layout_width="70dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#0ABBB5"
+        android:layout_marginEnd="9dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="80dp"
+        android:backgroundTint="#0ABBB5"
         android:text="Go"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/quizlet" />
 

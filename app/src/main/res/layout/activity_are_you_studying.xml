@@ -13,11 +13,10 @@
         android:layout_height="150dp"
         android:layout_alignParentStart="true"
         android:layout_marginTop="200dp"
-        android:backgroundTint="#5DFC0A"
         android:background="@drawable/round"
-        android:text="Button"
-        android:textSize="28sp"
-        tools:text="Start Studying" />
+        android:backgroundTint="#0ABBB5"
+        android:text="Start Studying"
+        android:textSize="28sp" />
 
     <Button
         android:id="@+id/stop_loc"
@@ -28,7 +27,7 @@
         android:layout_marginBottom="61dp"
         android:layout_marginVertical="200dp"
         android:background="@drawable/round"
-        android:backgroundTint="#FF0000"
+        android:backgroundTint="@color/materialcolorpicker__lightgrey"
         android:text="Stop Studying"
         android:textSize="28sp"
         tools:text="Stop Studying" />

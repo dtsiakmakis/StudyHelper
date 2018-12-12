@@ -58,7 +58,7 @@ public class AlarmService extends Service {
         }
         notification_builder.setSmallIcon(R.drawable.evernote)
                 .setContentTitle("Study Helper")
-                .setContentText("Testing Automatic Event!!!!!!!!!")
+                .setContentText("Its time to study!!!")
                 .setAutoCancel(true)
                 .setContentIntent(pending_intent);
         notification_manager.notify(3000,notification_builder.build());

@@ -133,11 +133,11 @@ public class StudentPreferences extends AppCompatActivity  {
                     String u_name = u.name;
                     String u_id = u.id;
                     String u_major = u.major;
-                    String u_hours = u.hours;
+//                    String u_hours = u.hours;
 
                     namePreference = u_name;
                     majorPreference = u_major;
-                    hoursPreference = u_hours;
+//                    hoursPreference = u_hours;
 
                     namePref.setText(namePreference);
                     majorPref.setText(majorPreference);
@@ -156,20 +156,18 @@ public class StudentPreferences extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if (v == done){
-                    Toast.makeText(StudentPreferences.this, "Should be sending data here",
-                            Toast.LENGTH_SHORT).show();
                     //SendData();
                     namePreference = namePref.getText().toString().trim();
                     majorPreference = majorPref.getText().toString().trim();
-                    hoursPreference = hoursPref.getText().toString().trim();
+//                    hoursPreference = hoursPref.getText().toString().trim();
                     //Creating new entry to users with major and name
                     getImageData(profilePicBitmap);
-                    User new_user = new User(namePreference, uid, majorPreference, hoursPreference, imageB64);
+                    User new_user = new User(namePreference, uid, majorPreference, imageB64);
                     mDatabase.child("User_details").child(uid).setValue(new_user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                   @Override
                                   public void onSuccess(Void aVoid) {
-                                      Toast.makeText(StudentPreferences.this, "Sent Data to db",
+                                      Toast.makeText(StudentPreferences.this, "Preferences saved!",
                                               Toast.LENGTH_SHORT).show();
                                   }
                               })
@@ -177,7 +175,7 @@ public class StudentPreferences extends AppCompatActivity  {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(StudentPreferences.this, "Data failed to be sent to db",
+                                    Toast.makeText(StudentPreferences.this, "Failed to save preferences",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });

@@ -30,8 +30,8 @@ import java.util.Map;
 
 public class AppUsageStats extends AppCompatActivity {
 
-    private TextView permissionMessage ;
-    private Button ShowStats;
+    //private TextView permissionMessage ;
+    //private Button ShowStats;
     private Boolean permission=Boolean.TRUE;
     private UsageStatsManager usageStatsManager;
     private Context context;
@@ -48,18 +48,21 @@ public class AppUsageStats extends AppCompatActivity {
 
         context=getApplicationContext();
         packageManager = context.getPackageManager();
-        permissionMessage = (TextView) findViewById(R.id.grant_permission_message);
+        //permissionMessage = (TextView) findViewById(R.id.grant_permission_message);
         //PhoneUnlock = (TextView)findViewById(R.id.phone_unlock);
-        ShowStats = (Button)findViewById(R.id.stats_button);
+        //ShowStats = (Button)findViewById(R.id.stats_button);
         //context=this.context;
         //chart = (BarChart) findViewById(R.id.chart);
         pieChart = (PieChart) findViewById(R.id.piechart);
         usageStatsManager=(UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        try {
+            ShowGraphs();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
-
-
-
+        /*
         permissionMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +71,8 @@ public class AppUsageStats extends AppCompatActivity {
                     openSettings();
                 }
             }
-        });
-
+        });*/
+        /*
         ShowStats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,13 +88,14 @@ public class AppUsageStats extends AppCompatActivity {
         });
 
 
+        */
 
     }
 
     private void openSettings() {
         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
         permission=true;
-        permissionMessage.setText("DONE");
+        //permissionMessage.setText("DONE");
     }
 
     public void ShowGraphs() throws PackageManager.NameNotFoundException {
@@ -118,7 +122,7 @@ public class AppUsageStats extends AppCompatActivity {
                 }
             }
             //permissionMessage.setText("App name :"+app.toString()+"\n Time Taken:"+app_time.toString());
-            permissionMessage.setText("");
+            //permissionMessage.setText("");
 
             //Bar chart stuff
             /*
@@ -129,10 +133,12 @@ public class AppUsageStats extends AppCompatActivity {
             chart.invalidate();
 
             */
+
             pieChart.setUsePercentValues(true);
             app.add("Studying");
             PieData data = new PieData(app , getDataSet_pie(app_time));
             data.setValueFormatter(new PercentFormatter());
+            data.setValueTextSize(30f);
 
             pieChart.setData(data);
             pieChart.setDrawSliceText(false);
@@ -143,7 +149,7 @@ public class AppUsageStats extends AppCompatActivity {
         }
         else
         {
-            permissionMessage.setText("Permission is false");
+            //permissionMessage.setText("Permission is false");
         }
 
 

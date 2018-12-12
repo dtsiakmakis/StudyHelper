@@ -55,6 +55,7 @@ public class Activity_Stats extends AppCompatActivity {
     public ArrayList<Long> stop_times=new ArrayList<Long>();
     public ArrayList<Long> still_times = new ArrayList<Long>();
     public ArrayList<Long> walking_times = new ArrayList<Long>();
+    public ArrayList<Long> tilting_times = new ArrayList<Long>();
     public ArrayList<Map<String,Object>> dataFromDb;
     String res;
     public Study_Session u;
@@ -111,6 +112,10 @@ public class Activity_Stats extends AppCompatActivity {
                         {
                             walking_times.add(Long.parseLong(mentry.getValue().toString()));
                         }
+                        if(mentry.getKey().toString().equalsIgnoreCase("Tilting"))
+                        {
+                            tilting_times.add(Long.parseLong(mentry.getValue().toString()));
+                        }
                         System.out.println(mentry.getValue());
                     }
 
@@ -122,6 +127,7 @@ public class Activity_Stats extends AppCompatActivity {
                 List<String> study_session_names=new ArrayList<>();
                 ArrayList<BarEntry> valueSet2 = new ArrayList<>();
                 ArrayList<BarEntry> valueSet3 = new ArrayList<>();
+                ArrayList<BarEntry> valueSet4 = new ArrayList<>();
 
                 for (int counter = 0; counter < still_times.size(); counter++) {
                     System.out.println(still_times.get(counter));
@@ -136,19 +142,26 @@ public class Activity_Stats extends AppCompatActivity {
                     valueSet2.add(v2e1);
                     BarEntry w2 = new BarEntry(walking_times.get(counter), counter); // Jan
                     valueSet3.add(w2);
+                    BarEntry w3 = new BarEntry(tilting_times.get(counter), counter); // Jan
+                    valueSet4.add(w2);
 
                 }
 
                 BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Still");
                 BarDataSet barDataSet3 = new BarDataSet(valueSet3, "Walk");
+                BarDataSet barDataSet4 = new BarDataSet(valueSet4, "Tilt");
+
 
                 //barDataSet2.setColors(Color.rgb(0, 155, 0));
                 barDataSet2.setColor(Color.rgb(0, 155, 0));
+                barDataSet3.setColor(Color.RED);
+                barDataSet4.setColor(Color.GREEN);
                 ArrayList<BarDataSet> dataSets = null;
                 dataSets = new ArrayList<>();
                 //dataSets.add(barDataSet1);
                 dataSets.add(barDataSet2);
                 dataSets.add(barDataSet3);
+                dataSets.add(barDataSet4);
                 chart=(BarChart) findViewById(R.id.chart);
                 BarData data = new BarData(study_session_names, dataSets);
                 //result.setText(dataSets.toString());

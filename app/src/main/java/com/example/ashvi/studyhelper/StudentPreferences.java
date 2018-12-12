@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,7 @@ public class StudentPreferences extends AppCompatActivity  {
     private ImageView profilePic;
     private String imageB64;
     private Bitmap profilePicBitmap;
+    private Button permission;
 
 
 
@@ -86,6 +88,7 @@ public class StudentPreferences extends AppCompatActivity  {
 //        getSupportActionBar().setHomeButtonEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         profilePicture = profilePic.getDrawingCache();
+        permission=findViewById(R.id.permission);
 
         //Getting current user
         mAuth = FirebaseAuth.getInstance();
@@ -106,6 +109,13 @@ public class StudentPreferences extends AppCompatActivity  {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         }});
+
+        permission.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                openSettings();
+            }});
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref = database.child("User_details");
@@ -236,5 +246,11 @@ public class StudentPreferences extends AppCompatActivity  {
             profilePicBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profilePic.setImageBitmap(profilePicBitmap);
         }
+    }
+
+    private void openSettings() {
+        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        //permission=true;
+        //permissionMessage.setText("DONE");
     }
 }

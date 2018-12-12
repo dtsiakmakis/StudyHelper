@@ -196,6 +196,9 @@ public class CalendarActivity  extends BaseActivity {
 
     private void deleteEventFromDB(long eventID){
         //TODO delete event from database
+        String uid = currentUser.getUid();
+        mDatabase.child("Calendar_Events").child(uid).child(String.valueOf(eventID)).removeValue();
+        startActivity(getIntent());
     }
 
     @Override
@@ -302,11 +305,12 @@ public class CalendarActivity  extends BaseActivity {
                                 String.valueOf(toAdd.getStartTime().get(Calendar.DAY_OF_MONTH)) +
                                 "colored with "+ toAdd.getColor()+
                                 "repeat on" +freq);
+                        eventsFromDB.add(toAdd);
                         if(freq.length()>2){
                             Log.d(TAG,String.format("Repeat test, got freq as "+freq));
                             eventsFromDB.addAll(makeRepeatEvents(freq,toAdd));
                         }
-                        eventsFromDB.add(toAdd);
+
 
                         nextEventID = Math.max(dataFromDB.size(),(int)toAdd.getId()+1);
 
@@ -380,69 +384,75 @@ public class CalendarActivity  extends BaseActivity {
 
     private List<WeekViewEvent> makeRepeatEvents(String freq,WeekViewEvent eve){
         List<WeekViewEvent> res = new ArrayList<>();
+        res.add(eve);
         Calendar startDate = eve.getStartTime();
         Calendar endTime = eve.getEndTime();
-        endTime.add(Calendar.DAY_OF_YEAR,1);
-        startDate.add(Calendar.DAY_OF_YEAR,1);
+        //endTime.add(Calendar.DAY_OF_YEAR,1);
+        //startDate.add(Calendar.DAY_OF_YEAR,1);
         Calendar endDate = (Calendar)startDate.clone();
         endDate.add(Calendar.MONTH,6);
         Log.d(TAG,"Inside the Freq test, the start date of the repeat is "+startDate.getTime().toString());
         Log.d(TAG,"Inside the Freq test, the end date of the repeat is "+endDate.getTime().toString());
 
+        // first add this event to the res
+
+
+
+
         while(startDate.getTimeInMillis()!=endDate.getTimeInMillis()){
             Calendar tmpStartForEve = (Calendar)startDate.clone();
             Calendar tmpEndForEve = (Calendar)endTime.clone();
-           switch(startDate.get(Calendar.DAY_OF_WEEK)){
-               case 1: // Sunday
-                   if(freq.contains("Sunday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 2: // Monday
-                   if(freq.contains("Monday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 3: // Tuesday
-                   if(freq.contains("Tuesday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 4: // Wednesday
-                   if(freq.contains("Wednesday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 5: // Thursday
-                   if(freq.contains("Thursday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 6: // Friday
-                   if(freq.contains("Friday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-               case 7: // Saturday
-                   if(freq.contains("Saturday")){
-                       WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
-                       tmp.setColor(eve.getColor());
-                       res.add(tmp);
-                   }
-                   break;
-           }
+            switch(startDate.get(Calendar.DAY_OF_WEEK)){
+                case 1: // Sunday
+                    if(freq.contains("Sunday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 2: // Monday
+                    if(freq.contains("Monday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 3: // Tuesday
+                    if(freq.contains("Tuesday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 4: // Wednesday
+                    if(freq.contains("Wednesday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 5: // Thursday
+                    if(freq.contains("Thursday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 6: // Friday
+                    if(freq.contains("Friday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+                case 7: // Saturday
+                    if(freq.contains("Saturday")){
+                        WeekViewEvent tmp = new WeekViewEvent(eve.getId(),eve.getName(),eve.getLocation(),tmpStartForEve,tmpEndForEve);
+                        tmp.setColor(eve.getColor());
+                        res.add(tmp);
+                    }
+                    break;
+            }
             startDate.add(Calendar.DAY_OF_YEAR,1);
             endTime.add(Calendar.DAY_OF_YEAR,1);
 

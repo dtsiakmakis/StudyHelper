@@ -99,8 +99,8 @@ public class ActivityDetector {
                 case DetectedActivity.ON_FOOT: {
                     label = context.getString(R.string.activity_on_foot);
                     stop = System.currentTimeMillis();
-                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
+//                            Toast.LENGTH_SHORT).show();
                     foot_time = foot_time + (stop - start);
                     start = System.currentTimeMillis();
                     break;
@@ -111,9 +111,9 @@ public class ActivityDetector {
                 }
                 case DetectedActivity.STILL: {
                     label = context.getString(R.string.activity_still);
-                    stop = System.currentTimeMillis();
-                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
-                            Toast.LENGTH_SHORT).show();
+//                    stop = System.currentTimeMillis();
+//                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
+//                            Toast.LENGTH_SHORT).show();
                     still_time = still_time + (stop - start);
                     start = System.currentTimeMillis();
                     break;
@@ -121,8 +121,8 @@ public class ActivityDetector {
                 case DetectedActivity.TILTING: {
                     label = context.getString(R.string.activity_tilting);
                     stop = System.currentTimeMillis();
-                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Activity done for this much time:" + (stop - start),
+//                            Toast.LENGTH_SHORT).show();
                     tilting_time = tilting_time + (stop - start);
                     start = System.currentTimeMillis();
 

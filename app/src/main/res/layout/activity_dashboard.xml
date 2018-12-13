@@ -18,6 +18,7 @@
         android:text="App Usages"
         android:textColor="#ffffff"
         android:textStyle="bold"
+        android:textSize="20sp"
         tools:layout_editor_absoluteX="207dp"
         tools:layout_editor_absoluteY="196dp" />
 
@@ -30,6 +31,7 @@
         android:layout_marginTop="97dp"
         android:background="@drawable/round"
         android:backgroundTint="#0ABBB5"
+        android:textSize="20sp"
         android:text="Activity Stats"
         android:textColor="#ffffff"
         android:textStyle="bold"
@@ -45,6 +47,7 @@
         android:layout_marginTop="202dp"
         android:background="@drawable/round"
         android:backgroundTint="#0ABBB5"
+        android:textSize="20sp"
         android:text="Study Locations"
         android:textColor="#ffffff"
         android:textStyle="bold"
@@ -61,6 +64,7 @@
         android:background="@drawable/round"
         android:backgroundTint="#0ABBB5"
         android:text="Study Hours"
+        android:textSize="20sp"
         android:textColor="#ffffff"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="207dp"

@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_marginTop="40dp"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -133,12 +133,12 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/logout"
-            android:tooltipText="Logout"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginTop="20dp"
             android:background="@drawable/round"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/logout"
             android:text="Logout"
+            android:tooltipText="Logout"
             tools:targetApi="o" />
 
 

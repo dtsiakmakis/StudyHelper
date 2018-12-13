@@ -63,7 +63,7 @@ public class BackgroundDetectedActivitiesService extends Service {
             @Override
             public void onSuccess(Void result) {
                 Toast.makeText(getApplicationContext(),
-                        "Successfully requested activity updates",
+                        "Started Tracking Activity !",
                         Toast.LENGTH_SHORT)
                         .show();
             }
@@ -87,7 +87,7 @@ public class BackgroundDetectedActivitiesService extends Service {
             @Override
             public void onSuccess(Void result) {
                 Toast.makeText(getApplicationContext(),
-                        "Removed activity updates successfully!",
+                        "Stopped Tracking Activities!",
                         Toast.LENGTH_SHORT)
                         .show();
             }

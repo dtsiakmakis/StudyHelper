@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -121,6 +122,10 @@ public class AppUsageStats extends AppCompatActivity {
 
                 }
             }
+            Toast.makeText(getApplicationContext(),
+                    "lengths:"+app_time,
+                    Toast.LENGTH_SHORT)
+                    .show();
             //permissionMessage.setText("App name :"+app.toString()+"\n Time Taken:"+app_time.toString());
             //permissionMessage.setText("");
 
@@ -138,10 +143,11 @@ public class AppUsageStats extends AppCompatActivity {
             app.add("Studying");
             PieData data = new PieData(app , getDataSet_pie(app_time));
             data.setValueFormatter(new PercentFormatter());
-            data.setValueTextSize(30f);
+            data.setValueTextSize(20f);
 
             pieChart.setData(data);
             pieChart.setDrawSliceText(false);
+
 
 
 

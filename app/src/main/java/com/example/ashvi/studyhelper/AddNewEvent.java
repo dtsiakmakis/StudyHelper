@@ -374,7 +374,8 @@ public class AddNewEvent extends AppCompatActivity implements View.OnClickListen
         Log.d(TAG,"IS HERE EXECUTED?");
 
         Calendar notifyCalendar = (Calendar)event.getStartTime().clone();
-        notifyCalendar.add(Calendar.MINUTE,-2);
+        //notifyCalendar.add(Calendar.MINUTE,-2);
+        notifyCalendar.add(Calendar.MINUTE,-5);
 
         long notifyTime  = notifyCalendar.getTimeInMillis();
         Intent toPending = new Intent(getApplicationContext(), AlarmService.class);

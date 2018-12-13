@@ -84,8 +84,8 @@ public class ActivityDetector {
 
     private void handleUserActivity(int type, int confidence) {
         String label =  context.getString(R.string.activity_unknown);
-        Toast.makeText(context, "Inside Handle User Activity:"+type,
-                Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "Inside Handle User Activity:"+type,
+        //        Toast.LENGTH_SHORT).show();
 
             switch (type) {
                 case DetectedActivity.IN_VEHICLE: {
@@ -182,7 +182,7 @@ public class ActivityDetector {
 
         //event_updates.put("Year",event.getStartTime().get(Calendar.YEAR));
 
-        Toast.makeText(context, "Tracking:",
+        Toast.makeText(context, "Tracking Activity",
                 Toast.LENGTH_SHORT).show();
         start = System.currentTimeMillis();
         current_date = new Date();
@@ -220,8 +220,8 @@ public class ActivityDetector {
                 TimeUnit.MILLISECONDS.toSeconds(tilting_time) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(tilting_time)));
 
-        Toast.makeText(context, "Tilting Time:"+tilting_time+" Still time:"+still,
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Tilting Time:"+tilting_time+" Still time:"+still,
+                //Toast.LENGTH_SHORT).show();
 
     }
 

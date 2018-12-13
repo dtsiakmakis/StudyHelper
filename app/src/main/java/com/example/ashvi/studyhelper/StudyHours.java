@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class Activity_Stats extends AppCompatActivity {
+public class StudyHours extends AppCompatActivity {
     private static final String TAG = "StatsActivity" ;
     public DatabaseReference mDatabase;
     public FirebaseAuth mAuth;
@@ -66,7 +66,7 @@ public class Activity_Stats extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats);
+        setContentView(R.layout.activity_study_hours);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //Setting on Click on the Done button. Here the data entered should be sent to the database.
@@ -75,7 +75,7 @@ public class Activity_Stats extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         String uid = currentUser.getUid();
-        result = (TextView) findViewById(R.id.result);
+        //result = (TextView) findViewById(R.id.result);
 
         //mDatabase.child("Study Sessions").child(uid).setValue(event_updates);
         DatabaseReference study_sessions = mDatabase.child("Study Sessions").child(uid).child("Sessions");
@@ -124,7 +124,7 @@ public class Activity_Stats extends AppCompatActivity {
 
 
                 }
-                result.setText("Still times:"+still_times+"\n"+"Start times:"+start_times+"\n"+"End times:"+stop_times);
+               // result.setText("Still times:"+still_times+"\n"+"Start times:"+start_times+"\n"+"End times:"+stop_times);
                 List<String> study_session_names=new ArrayList<>();
                 ArrayList<BarEntry> valueSet2 = new ArrayList<>();
                 ArrayList<BarEntry> valueSet3 = new ArrayList<>();
@@ -141,38 +141,31 @@ public class Activity_Stats extends AppCompatActivity {
                     study_session_names.add(df.format(start).toString());
 
 
-                    BarEntry v2e1 = new BarEntry(TimeUnit.MILLISECONDS.toMinutes(still_times.get(counter)), counter); // Jan
+                    BarEntry v2e1 = new BarEntry(TimeUnit.MILLISECONDS.toMinutes(stop_times.get(counter)-start_times.get(counter)), counter); // Jan
                     valueSet2.add(v2e1);
-                    BarEntry w2 = new BarEntry(TimeUnit.MILLISECONDS.toMinutes(walking_times.get(counter)), counter); // Jan
-                    valueSet3.add(w2);
-                    BarEntry w3 = new BarEntry(TimeUnit.MILLISECONDS.toMinutes(tilting_times.get(counter)), counter); // Jan
-                    valueSet4.add(w2);
+
 
                 }
 
-                BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Still");
-                BarDataSet barDataSet3 = new BarDataSet(valueSet3, "Walk");
-                BarDataSet barDataSet4 = new BarDataSet(valueSet4, "Tilt");
+                BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Study Hours in minutes");
 
 
                 //barDataSet2.setColors(Color.rgb(0, 155, 0));
                 barDataSet2.setColor(Color.rgb(0, 155, 0));
-                barDataSet3.setColor(Color.RED);
-                barDataSet4.setColor(Color.BLUE);
+
                 ArrayList<BarDataSet> dataSets = null;
                 dataSets = new ArrayList<>();
                 //dataSets.add(barDataSet1);
                 dataSets.add(barDataSet2);
-                dataSets.add(barDataSet3);
-                dataSets.add(barDataSet4);
-                chart=(BarChart) findViewById(R.id.chart);
+
+                chart=(BarChart) findViewById(R.id.chart1);
                 BarData data = new BarData(study_session_names, dataSets);
                 //result.setText(dataSets.toString());
                 chart.setData(data);
                 chart.setDescription("My Activity Chart");
                 chart.animateXY(2000, 2000);
                 chart.invalidate();
-                Toast.makeText(Activity_Stats.this, "Times:"+study_session_names.toString(),
+                Toast.makeText(StudyHours.this, "Times:"+study_session_names.toString(),
                         Toast.LENGTH_SHORT).show();
 
 

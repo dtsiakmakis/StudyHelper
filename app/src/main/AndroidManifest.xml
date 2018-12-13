@@ -61,7 +61,8 @@
         </receiver>
 
         <activity android:name=".AreYouStudying" />
-        <activity android:name=".Activity_Stats"></activity>
+        <activity android:name=".Activity_Stats" />
+        <activity android:name=".StudyHours"></activity>
     </application>
 
 </manifest>

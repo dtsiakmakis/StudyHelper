@@ -9,9 +9,13 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePicture"
@@ -25,9 +29,9 @@
             android:id="@+id/cameraBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#0ABBB5"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:backgroundTint="#0ABBB5"
             android:text="Set profile picture"
             android:textSize="12sp"
             tools:layout_editor_absoluteX="60dp"
@@ -39,8 +43,8 @@
         android:id="@+id/major"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
         android:text="Major:"
         android:textColor="@android:color/black"
         android:textSize="20sp"
@@ -91,14 +95,14 @@
 
     <Button
         android:id="@+id/permission"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginBottom="116dp"
-        android:layout_marginStart="92dp"
+        android:layout_width="335dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="500dp"
         android:backgroundTint="#0ABBB5"
         android:text="Provide Permissions for usage statistics"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/majorPref"

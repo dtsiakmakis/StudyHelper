@@ -1,6 +1,9 @@
 package com.example.ashvi.studyhelper;
 
+import android.Manifest;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ public class AreYouStudying extends AppCompatActivity {
     ActivityDetector activityDetector;
     NoiseDetector noiseDetector;
     private Button start_stud,stop_stud;
+    int RECORD_AUDIO = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,12 @@ public class AreYouStudying extends AppCompatActivity {
                 }
             }
         };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    RECORD_AUDIO);
+        }
+
 
 
 

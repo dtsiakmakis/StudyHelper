@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         preferences = findViewById(R.id.preferences);
         resources = findViewById(R.id.resource);
         dash = findViewById(R.id.dashboard);
-        testEvents=(Button) findViewById(R.id.test_events);
+//        testEvents=(Button) findViewById(R.id.test_events);
         study_log=(Button) findViewById(R.id.log_studying);
 
 
@@ -76,11 +76,6 @@ public class ProfileActivity extends AppCompatActivity {
         userCalendar = findViewById(R.id.calendar);
 
         askPermission();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    RECORD_AUDIO);
-        }
 
 
 
@@ -144,16 +139,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        testEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v==testEvents){
-
-                        startActivity(new Intent(getApplicationContext(), Test_AutomaticEvent.class));
-
-                }
-            }
-        });
+//        testEvents.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (v==testEvents){
+//
+//                        startActivity(new Intent(getApplicationContext(), Test_AutomaticEvent.class));
+//
+//                }
+//            }
+//        });
         dash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,10 +210,18 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
     private void askPermission() {
-        Log.d("tag", "askPermission()");
+//        Log.d("tag", "askPermission()");
         ActivityCompat.requestPermissions(
                 this,
                 new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                REQ_PERMISSION
+        );
+    }
+    private void askSoundPermission() {
+//        Log.d("tag", "askPermission()");
+        ActivityCompat.requestPermissions(
+                this,
+                new String[] { Manifest.permission.RECORD_AUDIO },
                 REQ_PERMISSION
         );
     }

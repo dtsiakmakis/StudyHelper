@@ -9,7 +9,6 @@ public class User {
     public String name;
     public String id;
     public String major;
-    public String hours;
     public String profilePicture;
 
 
@@ -18,11 +17,10 @@ public class User {
     public User() {
     }
 
-    public User(String name,String id, String major, String hours, String profilePicture) {
+    public User(String name,String id, String major, String profilePicture) {
         this.name = name;
         this.id = id;
         this.major = major;
-        this.hours = hours;
         this.profilePicture = profilePicture;
     }
 }

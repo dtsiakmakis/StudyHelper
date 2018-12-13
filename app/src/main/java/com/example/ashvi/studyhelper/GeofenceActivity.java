@@ -102,10 +102,10 @@ public class GeofenceActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geofence);
-        textLat = (TextView) findViewById(R.id.lat);
-        textLong = (TextView) findViewById(R.id.lon);
-        showLocation = findViewById(R.id.showLocation);
-        locationText = findViewById(R.id.locationText);
+//        textLat = (TextView) findViewById(R.id.lat);
+//        textLong = (TextView) findViewById(R.id.lon);
+//        showLocation = findViewById(R.id.showLocation);
+//        locationText = findViewById(R.id.locationText);
         showHeatMap = findViewById(R.id.showHeat);
 
 
@@ -114,19 +114,19 @@ public class GeofenceActivity extends AppCompatActivity
 
         // create GoogleApiClient
         createGoogleApi();
-        showLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v == showLocation){
-                    try {
-                        locationText.setText(getAddressFromLocation());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
+//        showLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (v == showLocation){
+//                    try {
+//                        locationText.setText(getAddressFromLocation());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//        });
         showHeatMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -362,8 +362,8 @@ public class GeofenceActivity extends AppCompatActivity
     }
 
     private void writeActualLocation(Location location) {
-        textLat.setText( "Lat: " + location.getLatitude() );
-        textLong.setText( "Long: " + location.getLongitude() );
+//        textLat.setText( "Lat: " + location.getLatitude() );
+//        textLong.setText( "Long: " + location.getLongitude() );
 
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
     }
